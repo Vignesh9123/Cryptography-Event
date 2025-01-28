@@ -60,3 +60,56 @@ public class RSA{
 // Encrypted Bytes: 16-65-8952-4311298119-5676-64-12457115-66513-110-68-58-7094-1045281-88-9124-4996-50-70-6-126-7702951-97-105-75-9553-17-116122-30-71-28-2-11412549-39-12630-5525-81-33658098-72-18-91-6861-10410738-103-4654-48-126-127-10910971091017-3-5521-9032-92-73-36-127-115-59108-56151811091020-16111-17-3517262055127-4185-116-33124-7090-127-102-1099899-117-2511122-119-15-16301911246-114-12178551-461278472-305230-87-56-10141-126-32-66125-41-72-50-6148-20-8-62111-12337122-13-53-14-89803066-63158115114-35-6047-1263851-58-516561-72118-124-54-107-72-5094-3-87-92-62-5-8682-4111514459-52-109-81103-87-20-1-103-34-34-1252027-104423-7174-63-122-36-118-38-1151041-26219-83-45-69-29-44-34314810620111-27-5764-47-67
 // Decrypted Bytes: 721011218410410511573115828365
 // Decrypted String: HeyThisIsRSA
+
+
+// V2: Take e, d and n from user. Encrypt message using e and decrypt using d
+
+import java.math.BigInteger;
+import java.util.Scanner;
+
+public class RSA {
+
+    public static void main(String[] args) {
+        BigInteger e, d, n;
+
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the public key (e): ");
+        e = new BigInteger(sc.next());
+        System.out.print("Enter the private key (d): ");
+        d = new BigInteger(sc.next());
+        System.out.print("Enter the modulus (n): ");
+        n = new BigInteger(sc.next());
+
+        System.out.println("Public Key (e, n): (" + e + ", " + n + ")");
+        System.out.println("Private Key (d, n): (" + d + ", " + n + ")");
+
+        String word = "Hi";
+        System.out.println("Original Word: " + word);
+
+        BigInteger message = new BigInteger(word.getBytes());
+        if (message.compareTo(n) >= 0) {
+            System.out.println("Error: Message is too large for the modulus n. Choose a larger n.");
+            return;
+        }
+        System.out.println("Original Message as Number: " + message);
+
+        BigInteger ciphertext = message.modPow(e, n);
+        System.out.println("Encrypted Message: " + ciphertext);
+
+        BigInteger decryptedMessage = ciphertext.modPow(d, n);
+
+        String decryptedWord = new String(decryptedMessage.toByteArray());
+        System.out.println("Decrypted Word: " + decryptedWord);
+    }
+}
+
+// Output:
+// Enter the public key (e): 65537
+// Enter the private key (d): 803633
+// Enter the modulus (n): 1040399
+// Public Key (e, n): (65537, 1040399)
+// Private Key (d, n): (803633, 1040399)
+// Original Word: Hi
+// Original Message as Number: 18537
+// Encrypted Message: 28975
+// Decrypted Word: Hi
